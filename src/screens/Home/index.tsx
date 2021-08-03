@@ -9,11 +9,12 @@ import {
   Container,
   Header,
   HeaderContent,
-  TotalCars
+  TotalCars,
+  CarList
 } from './styles';
 
 const Home: React.FC = () => {
-  const carDataOne = {
+  const carData = {
     brand: 'Audi',
     name: 'RS 5 Coupé',
     rent: {
@@ -21,16 +22,6 @@ const Home: React.FC = () => {
       price: 120,
     },
     thumbnail: 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png'
-  };
-
-  const carDataTwo = {
-    brand: 'Porsche',
-    name: 'Panamera',
-    rent: {
-      period: 'Ao dia',
-      price: 340,
-    },
-    thumbnail: 'https://i.pinimg.com/originals/b3/12/53/b31253a815e632ef08ffb569e79436b8.png'
   };
 
   return (
@@ -53,8 +44,12 @@ const Home: React.FC = () => {
         </HeaderContent>
       </Header>
 
-      <Car data={carDataOne}/>
-      <Car data={carDataTwo}/>
+      <CarList 
+        data={[1,2,3,4,5,6,7]}
+        keyExtractor={item => String(item)}
+        renderItem={({ item }) => <Car data={carData} />}
+      />
+      
     </Container>
   );
 }
