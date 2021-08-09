@@ -16,6 +16,7 @@ import { ThemeProvider } from 'styled-components/native';
 import theme from './src/styles/theme';
 import { Text } from 'react-native';
 import { CarDetails } from './src/screens/CarDetails';
+import { Scheduling } from './src/screens/Scheduling';
 
 
 export default function App() {
@@ -35,7 +36,7 @@ export default function App() {
     <ThemeProvider
       theme={theme}
     >
-      <CarDetails />
+      <Scheduling />
     </ThemeProvider>
   );
 }
