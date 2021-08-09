@@ -25,7 +25,9 @@ import {
   Price,
   About,
   Accessories,
+  Footer,
 } from './styles';
+import { Button } from "../../components/Button";
 
 export const CarDetails: React.FC = () => {
   return(
@@ -69,6 +71,11 @@ export const CarDetails: React.FC = () => {
           para quem gosta de acelerar.
         </About>
       </Content>
+
+      <Footer>
+        <Button title="Confirmar" />
+      </Footer>
+
     </Container>
   )
 }
