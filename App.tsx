@@ -10,13 +10,10 @@ import {
   Archivo_600SemiBold
 } from '@expo-google-fonts/archivo';
 
-import Home from './src/screens/Home';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components/native';
 import theme from './src/styles/theme';
-import { Text } from 'react-native';
-import { CarDetails } from './src/screens/CarDetails';
-import { Scheduling } from './src/screens/Scheduling';
+import { SchedulingComplete } from './src/screens/SchedulingComplete';
 
 
 export default function App() {
@@ -36,7 +33,7 @@ export default function App() {
     <ThemeProvider
       theme={theme}
     >
-      <Scheduling />
+      <SchedulingComplete />
     </ThemeProvider>
   );
 }
