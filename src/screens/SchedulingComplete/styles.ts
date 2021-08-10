@@ -4,9 +4,11 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.header};
-  
-  padding-top: 20px;
-  padding-bottom: 10px;
+
+
+  /* padding-top: 96px; */
+  padding-top: 20px; 
+  padding-bottom: 10px; 
 `;
 
 export const Content = styled.View`
@@ -15,6 +17,7 @@ export const Content = styled.View`
   align-items: center;
 
   padding-bottom: 20px;
+  /* padding-bottom: 80px */
 `;
 
 export const Title = styled.Text`

@@ -13,7 +13,7 @@ import {
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components/native';
 import theme from './src/styles/theme';
-import { SchedulingComplete } from './src/screens/SchedulingComplete';
+import { Routes } from './src/routes';
 
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
     <ThemeProvider
       theme={theme}
     >
-      <SchedulingComplete />
+      <Routes />
     </ThemeProvider>
   );
 }
