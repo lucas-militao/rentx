@@ -24,6 +24,10 @@ const Home: React.FC = () => {
     thumbnail: 'https://freepngimg.com/thumb/audi/35227-5-audi-rs5-red.png'
   };
 
+  function handleCarDetails() {
+    //TODO
+  }
+
   return (
     <Container>
       <StatusBar
