@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -14,6 +15,8 @@ import {
 } from './styles';
 
 const Home: React.FC = () => {
+  const navigation = useNavigation();  
+
   const carData = {
     brand: 'Audi',
     name: 'RS 5 Coupé',
@@ -25,7 +28,7 @@ const Home: React.FC = () => {
   };
 
   function handleCarDetails() {
-    //TODO
+    navigation.navigate("CarDetails");
   }
 
   return (
@@ -51,7 +54,7 @@ const Home: React.FC = () => {
       <CarList 
         data={[1,2,3,4,5,6,7]}
         keyExtractor={item => String(item)}
-        renderItem={({ item }) => <Car data={carData} />}
+        renderItem={({ item }) => <Car data={carData} onPress={handleCarDetails}/>}
       />
       
     </Container>
