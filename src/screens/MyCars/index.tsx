@@ -89,35 +89,35 @@ export function MyCars() {
       {
         loading ? <Load /> :
         <Content>
-        <Appointments>
+          <Appointments>
           <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
           <AppointmentsQuantity>{cars.length}</AppointmentsQuantity>
         </Appointments>
 
-        <FlatList
-          data={cars}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <CarWrapper>
-              <Car data={item.car}/>
-              <CarFooter>
-                <CarFooterTitle>Período</CarFooterTitle>
-                <CarFooterPeriod>
-                  <CarFooterDate>{item.startDate}</CarFooterDate>
-                  <AntDesign
-                    name="arrowright"
-                    size={20}
-                    color={theme.colors.title}
-                    style={{ marginHorizontal: 10}}
-                  />
-                  <CarFooterDate>{item.endDate}</CarFooterDate>
-                </CarFooterPeriod>
-              </CarFooter>
-            </CarWrapper>
-          )}
-        />
-      </Content>
+          <FlatList
+            data={cars}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <CarWrapper>
+                <Car data={item.car}/>
+                <CarFooter>
+                  <CarFooterTitle>Período</CarFooterTitle>
+                  <CarFooterPeriod>
+                    <CarFooterDate>{item.startDate}</CarFooterDate>
+                    <AntDesign
+                      name="arrowright"
+                      size={20}
+                      color={theme.colors.title}
+                      style={{ marginHorizontal: 10}}
+                    />
+                    <CarFooterDate>{item.endDate}</CarFooterDate>
+                  </CarFooterPeriod>
+                </CarFooter>
+              </CarWrapper>
+            )}
+          />
+        </Content>
       }
     </Container>
   );
