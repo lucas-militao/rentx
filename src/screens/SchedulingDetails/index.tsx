@@ -54,6 +54,7 @@ interface RentalPeriod {
 
 export const SchedulingDetails: React.FC = () => {
   const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>({} as RentalPeriod);
+  const [loading, setLoading] = useState(false);
 
   const theme = useTheme();
   const route = useRoute();
@@ -63,6 +64,7 @@ export const SchedulingDetails: React.FC = () => {
   const rentTotal = Number(dates.length * car.rent.price);
 
   async function handleConfirmRental() {
+    setLoading(true);
     const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
 
     const unavailable_dates = [
@@ -82,7 +84,10 @@ export const SchedulingDetails: React.FC = () => {
       unavailable_dates
     })
     .then(() => navigation.navigate('SchedulingComplete'))
-    .catch(() => Alert.alert("Não foi possível confirmar o agendamento."));
+    .catch(() => {
+      setLoading(false);
+      Alert.alert("Não foi possível confirmar o agendamento.");
+    });
   }
 
   function handleBack() {
@@ -172,6 +177,8 @@ export const SchedulingDetails: React.FC = () => {
           title="Alugar agora" 
           color={theme.colors.success} 
           onPress={handleConfirmRental}
+          enabled={!loading}
+          loading={loading}
         />
       </Footer>
 
