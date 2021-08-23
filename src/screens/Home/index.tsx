@@ -21,7 +21,7 @@ import { Load } from '../../components/Load';
 import { useTheme } from 'styled-components';
 
 const Home: React.FC = () => {
-  const [cars, setCars] = useState<CarDTO>([]);
+  const [cars, setCars] = useState<CarDTO[]>([] as CarDTO[]);
   const [loading, setLoading] = useState(true);
 
   const navigation = useNavigation(); 
@@ -65,7 +65,7 @@ const Home: React.FC = () => {
           />
 
           <TotalCars>
-            Total de 12 carros
+            Total de {cars.length} carros
           </TotalCars>
         </HeaderContent>
       </Header>
