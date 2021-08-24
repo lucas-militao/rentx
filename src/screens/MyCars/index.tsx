@@ -25,7 +25,7 @@ import {
   CarFooterPeriod,
   CarFooterDate,
 } from "./styles";
-import { Load } from "../../components/Load";
+import { LoadAnimation } from "../../components/LoadAnimation";
 
 interface CarProps {
   id: string;
@@ -50,7 +50,6 @@ export function MyCars() {
     async function fetchCars() {
       try {
         const response = await api.get('/schedules_byuser/?user_id=1');
-        console.log(response.data);
         setCars(response.data);
       } catch (error) {
         console.log(error);
@@ -87,7 +86,7 @@ export function MyCars() {
       </Header>
 
       {
-        loading ? <Load /> :
+        loading ? <LoadAnimation /> :
         <Content>
           <Appointments>
           <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
