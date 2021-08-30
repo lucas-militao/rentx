@@ -17,7 +17,7 @@ import {
   CarList,
 } from './styles';
 
-import { Load } from '../../components/Load';
+import { LoadAnimation } from '../../components/LoadAnimation';
 import { useTheme } from 'styled-components';
 import Animated, { useSharedValue, useAnimatedStyle, useAnimatedGestureHandler, withSpring } from 'react-native-reanimated';
 import { RectButton, PanGestureHandler } from 'react-native-gesture-handler';
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
       return true;
-    })
+    });
   }, []);
 
   return (
@@ -109,7 +109,7 @@ const Home: React.FC = () => {
         </HeaderContent>
       </Header>
 
-      { loading ? <Load /> :
+      { loading ? <LoadAnimation /> :
         <CarList 
           data={cars}
           keyExtractor={item => item.id}
