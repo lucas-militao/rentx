@@ -19,7 +19,7 @@ export function StackRoutes() {
       screenOptions={{
         headerShown: false
       }}
-      initialRouteName="Home"
+      initialRouteName="SignIn"
     >
       <Screen 
         name="SignIn"
