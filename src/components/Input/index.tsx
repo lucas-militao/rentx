@@ -49,6 +49,8 @@ export function Input({
         onFocus={handleInputFocused}
         onBlur={handleInputBlur}
         isFocused={isFocused}
+        autoCorrect={false}
+        autoCapitalize='none'
         {...rest}
       />
     </Container>
