@@ -23,6 +23,7 @@ import {
   Title,
 } from './styles';
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../hooks/auth";
 
 export function SignIn() {
   const [email, setEmail] = useState('');
@@ -31,6 +32,8 @@ export function SignIn() {
   const theme = useTheme();
 
   const navigation = useNavigation();
+
+  const { signIn } = useAuth();
 
   async function handleSignIn() {
     try {
@@ -43,7 +46,12 @@ export function SignIn() {
       });
   
       await schema.validate({ email, password});
+
+      signIn({ email, password });
+
+      Alert.alert('tudo certo');
     } catch (error) {
+      console.log(error);
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Opa ', error.message);
       }
