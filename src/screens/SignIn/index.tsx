@@ -48,8 +48,6 @@ export function SignIn() {
       await schema.validate({ email, password});
 
       signIn({ email, password });
-
-      Alert.alert('tudo certo');
     } catch (error) {
       console.log(error);
       if (error instanceof Yup.ValidationError) {
