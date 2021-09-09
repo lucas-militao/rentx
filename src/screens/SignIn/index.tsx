@@ -24,7 +24,6 @@ import {
 } from './styles';
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/auth";
-import { database } from "../../database";
 
 export function SignIn() {
   const [email, setEmail] = useState('');
@@ -63,20 +62,6 @@ export function SignIn() {
   function handleNewAccount() {
     navigation.navigate('SignUpFirstStep');
   }
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const userCollection = database.get('users');
-        const users = await userCollection.query().fetch();
-        console.log(users);
-      } catch (error) {
-        Alert.alert(String(error));
-      }
-    }
-
-    loadData();
-  }, []);
 
   return(
     <KeyboardAvoidingView behavior="position" enabled>
