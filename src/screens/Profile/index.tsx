@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, ScrollView, StatusBar, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import * as Yup from 'yup';
 import { useTheme } from 'styled-components';
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -26,9 +27,11 @@ import {
 } from './styles';
 import { PasswordInput } from '../../components/PasswordInput';
 import { useAuth } from '../../hooks/auth';
+import { Button } from '../../components/Button';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 export function Profile() {
-  const { user } = useAuth();
+  const { user, signOut, updateUser } = useAuth();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [avatar, setAvatar] = useState(user.avatar);
@@ -41,9 +44,6 @@ export function Profile() {
 
   function handleBack() {
     navigation.goBack();
-  }
-
-  function handleSingOut() {
   }
 
   function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
@@ -67,6 +67,36 @@ export function Profile() {
     }
   }
   
+  async function handleProfileUpdate() {
+    try {
+      const schema = Yup.object().shape({
+        driverLicense: Yup.string().required('CNH é obrigatória'),
+        name: Yup.string().required('Nome é obrigatório'),
+      });
+
+      const data = { name, driverLicense };
+      await schema.validate(data);
+
+      await updateUser({
+        id: user.id,
+        user_id: user.user_id,
+        email: user.email,
+        name,
+        driver_license: driverLicense,
+        avatar,
+        token: user.token
+      });
+
+      Alert.alert('Perfil atualizado');
+
+    } catch (error) {
+      if(error instanceof Yup.ValidationError) {
+        Alert.alert("Opa ", error.message);
+      }
+      Alert.alert("Não foi possível atualizar o perfil");
+    }    
+  }
+
   return(
     <KeyboardAvoidingView behavior="position" enabled>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -75,7 +105,7 @@ export function Profile() {
             <HeaderTop>
               <BackButton color={theme.colors.shape} onPress={handleBack}/>
               <HeaderTitle>Editar Perfil</HeaderTitle>
-              <LogoutButton onPress={handleSingOut}>
+              <LogoutButton onPress={signOut}>
                 <Feather 
                   name="power"
                   size={24}
@@ -95,69 +125,73 @@ export function Profile() {
               </PhotoButton>
             </PhotoContainer>
           </Header>
+          <ScrollView>
+            <Content style={{ marginBottom: useBottomTabBarHeight() }}>
+              <Options>
+                <Option 
+                  active={option === 'dataEdit'}
+                  onPress={() => handleOptionChange('dataEdit')}
+                >
+                  <OptionTitle active={option === 'dataEdit'}>
+                    Dados
+                  </OptionTitle>
+                </Option>
+                <Option 
+                  active={option === 'passwordEdit'}
+                  onPress={() => handleOptionChange('passwordEdit')}
+                >
+                  <OptionTitle active={option === 'passwordEdit'}>
+                    Trocar Dados
+                  </OptionTitle>
+                </Option>
+              </Options>
 
-          <Content style={{ marginBottom: useBottomTabBarHeight() }}>
-            <Options>
-              <Option 
-                active={option === 'dataEdit'}
-                onPress={() => handleOptionChange('dataEdit')}
-              >
-                <OptionTitle active={option === 'dataEdit'}>
-                  Dados
-                </OptionTitle>
-              </Option>
-              <Option 
-                active={option === 'passwordEdit'}
-                onPress={() => handleOptionChange('passwordEdit')}
-              >
-                <OptionTitle active={option === 'passwordEdit'}>
-                  Trocar Dados
-                </OptionTitle>
-              </Option>
-            </Options>
-
-            {
-              option === 'dataEdit' 
-              ?
-                <Section>
-                  <Input
-                    iconName="user"
-                    placeholder="Nome"
-                    autoCorrect={false}
-                    defaultValue={user.name}
-                    onChangeText={setName}
-                  />
-                  <Input
-                    iconName="mail"
-                    editable={false}
-                    defaultValue={user.email}
-                  />
-                  <Input
-                    iconName="credit-card"
-                    placeholder="CNH"
-                    keyboardType="numeric"
-                    defaultValue={user.driver_license}
-                    onChangeText={setDriverLicense}
-                  />
-                </Section>
-              :
-                <Section>
-                  <PasswordInput
-                    iconName="lock"
-                    placeholder="Senha atual"
-                  />
-                  <PasswordInput
-                    iconName="lock"
-                    placeholder="Nova senha"
-                  />
-                  <PasswordInput
-                    iconName="lock"
-                    placeholder="Repetir senha"
-                  />
-            
-                </Section>
-            }
-          </Content>
+              {
+                option === 'dataEdit' 
+                ?
+                  <Section>
+                    <Input
+                      iconName="user"
+                      placeholder="Nome"
+                      autoCorrect={false}
+                      defaultValue={user.name}
+                      onChangeText={setName}
+                    />
+                    <Input
+                      iconName="mail"
+                      editable={false}
+                      defaultValue={user.email}
+                    />
+                    <Input
+                      iconName="credit-card"
+                      placeholder="CNH"
+                      keyboardType="numeric"
+                      defaultValue={user.driver_license}
+                      onChangeText={setDriverLicense}
+                    />
+                  </Section>
+                :
+                  <Section>
+                    <PasswordInput
+                      iconName="lock"
+                      placeholder="Senha atual"
+                    />
+                    <PasswordInput
+                      iconName="lock"
+                      placeholder="Nova senha"
+                    />
+                    <PasswordInput
+                      iconName="lock"
+                      placeholder="Repetir senha"
+                    />
+                  </Section>
+              }
+              <Button
+                title="Salvar alterações"
+                onPress={handleProfileUpdate}
+              />
+            </Content>
+          </ScrollView>
         </Container>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
