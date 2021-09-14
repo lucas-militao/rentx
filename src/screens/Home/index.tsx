@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, BackHandler } from 'react-native';
+import { StatusBar, StyleSheet, BackHandler, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
@@ -17,12 +18,12 @@ import {
 } from './styles';
 
 import { LoadAnimation } from '../../components/LoadAnimation';
-import { RectButton } from 'react-native-gesture-handler';
 
 const Home: React.FC = () => {
   const [cars, setCars] = useState<CarDTO[]>([] as CarDTO[]);
   const [loading, setLoading] = useState(true);
 
+  const netInfo = useNetInfo();
   const navigation = useNavigation(); 
 
   function handleCarDetails(car: CarDTO) {
@@ -57,11 +58,20 @@ const Home: React.FC = () => {
     };
   }, []);
 
+
+  // useEffect(() => {
+  //   BackHandler.addEventListener('hardwareBackPress', () => {
+  //     return true;
+  //   });
+  // }, []);
+
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return true;
-    });
-  }, []);
+    if (netInfo.isConnected) {
+      Alert.alert('Você está online');
+    } else {
+      Alert.alert('Você está offline');
+    }
+  }, [netInfo.isConnected]);
 
   return (
     <Container>
