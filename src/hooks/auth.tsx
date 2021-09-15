@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { database } from "../database";
 import api from "../services/api";
-import { User as ModelUser, User } from '../database/model/User';
+import { User as ModelUser } from '../database/model/User';
 
 interface User {
   id: string;

@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, BackHandler, Alert } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { synchronize } from '@nozbe/watermelondb/sync';
+import { database } from '../../database';
 
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
+import { Car as ModelCar } from '../../database/model/Car';
 import api from '../../services/api';
-import { CarDTO } from '../../dtos/CarDTO';
 
 import { 
   Container,
@@ -20,18 +22,39 @@ import {
 import { LoadAnimation } from '../../components/LoadAnimation';
 
 const Home: React.FC = () => {
-  const [cars, setCars] = useState<CarDTO[]>([] as CarDTO[]);
+  const [cars, setCars] = useState<ModelCar[]>([] as ModelCar[]);
   const [loading, setLoading] = useState(true);
 
   const netInfo = useNetInfo();
   const navigation = useNavigation(); 
 
-  function handleCarDetails(car: CarDTO) {
+  function handleCarDetails(car: ModelCar) {
     navigation.navigate("CarDetails", { car });
   }
 
-  function handleOpenMyCars() {
-    navigation.navigate("MyCars");
+  async function offlineSynchronize() {
+    try { 
+      await synchronize({
+        database,
+        pullChanges: async ({ lastPulledAt }) => {
+          const response = await api
+            .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+  
+          console.log(response);
+  
+          const { changes, latestVersion } = response.data;
+  
+          return { changes, timestamp: latestVersion}
+        },
+        pushChanges: async ({ changes }) => {
+          const user = changes.users;
+          await api.post('/users/sync', user);
+        }
+      });
+    } catch (error) {
+      const err = error as unknown as Error;
+      console.log("ERROR: " + err.message);
+    }
   }
 
   useEffect(() => {
@@ -39,9 +62,10 @@ const Home: React.FC = () => {
 
     async function fetchCars() {
       try {
-        const response = await api.get('/cars'); 
+        const cars = await database.get<ModelCar>('cars').query().fetch();
+
         if (isMounted) {
-          setCars(response.data);
+          setCars(cars);
         }
       } catch (error) {
         console.log(error);
@@ -58,20 +82,17 @@ const Home: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (netInfo.isConnected === true) {
+      offlineSynchronize();
+    }
+  }, [netInfo.isConnected])
 
   // useEffect(() => {
   //   BackHandler.addEventListener('hardwareBackPress', () => {
   //     return true;
   //   });
   // }, []);
-
-  useEffect(() => {
-    if (netInfo.isConnected) {
-      Alert.alert('Você está online');
-    } else {
-      Alert.alert('Você está offline');
-    }
-  }, [netInfo.isConnected]);
 
   return (
     <Container>
