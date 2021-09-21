@@ -40,19 +40,17 @@ const Home: React.FC = () => {
           const response = await api
             .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
   
-          // console.log(response);
-  
           const { changes, latestVersion } = response.data;
 
           console.log("#### SINCRONIZAÇÃO ####");
-          console.log(changes);
-          console.log(lastPulledAt);
+          // console.log(changes);
+          // console.log(lastPulledAt);
   
           return { changes, timestamp: latestVersion }
         },
         pushChanges: async ({ changes }) => {
           const user = changes.users;
-          await api.post('/users/sync', user);
+          await api.post('/users/sync', user).catch(console.log);
         }
       });
     } catch (error) {
