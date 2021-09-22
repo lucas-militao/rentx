@@ -41,10 +41,6 @@ const Home: React.FC = () => {
             .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
   
           const { changes, latestVersion } = response.data;
-
-          console.log("#### SINCRONIZAÇÃO ####");
-          // console.log(changes);
-          // console.log(lastPulledAt);
   
           return { changes, timestamp: latestVersion }
         },
@@ -89,12 +85,6 @@ const Home: React.FC = () => {
       offlineSynchronize();
     }
   }, [netInfo.isConnected])
-
-  // useEffect(() => {
-  //   BackHandler.addEventListener('hardwareBackPress', () => {
-  //     return true;
-  //   });
-  // }, []);
 
   return (
     <Container>
